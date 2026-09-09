@@ -59,7 +59,7 @@ for i in range(50):
     item = Recyclable(random.choice(images))
     item.rect.x = random.randrange(screen_width)
     item.rect.y = random.randrange(screen_height)
-    item_list.add(plastic)
+    item_list.add(item)
     allsprites.add(item)
 
 WHITE = (255,255,255)
@@ -99,3 +99,37 @@ while playing:
         countDown = myFont.render("Time Left:"+str(60 - int(timeElapsed)),True,BLACK)
         screen.blit(countDown,(20,10))
         
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            if bin.rect.y > 0:
+                bin.rect.y -= 5
+
+        if keys[pygame.K_DOWN]:
+            if bin.rect.y < 630:
+                bin.rect.y += 5
+
+        if keys[pygame.K_RIGHT]:
+            if bin.rect.x < 850:
+                bin.rect.x += 5
+
+        if keys[pygame.K_LEFT]:
+            if bin.rect.x > 0:
+                bin.rect.x -= 5
+
+        item_hit_list = pygame.sprite.spritecollide(bin,item_list, True)
+
+        for item in item_hit_list:
+            score += 1
+            text = myFont.render("Score ="+str(score),True,BLACK)
+
+        plastic_hit_list = pygame.sprite.spritecollide(bin,plastic_list,True)
+
+        for plastic in plastic_hit_list:
+            score -= 5
+            text = myFont.render("Score ="+str(score),True,BLACK)
+
+    screen.blit(text,(20,50))
+    allsprites.draw(screen)
+    pygame.display.update()
+
+pygame.quit()
